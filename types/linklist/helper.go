@@ -18,7 +18,3 @@ func remover(expr types.Filter, values ...interface{}) bool {
 	}
 	return false
 }
-
-func Truer(values ...interface{}) bool {
-	return true
-}

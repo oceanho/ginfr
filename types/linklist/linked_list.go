@@ -268,7 +268,7 @@ func (l *LinkedList) PopTail() interface{} {
 }
 
 func (l *LinkedList) All() []interface{} {
-	return l.AllWithExpr(Truer)
+	return l.AllWithExpr(types.Truer)
 }
 
 func (l *LinkedList) Index(idx int) interface{} {
@@ -318,5 +318,5 @@ func (l *LinkedList) AllWithExpr(expr types.Filter) []interface{} {
 }
 
 func (l *LinkedList) JSON() ([]byte, error) {
-	return json.Marshal(l.AllWithExpr(Truer))
+	return json.Marshal(l.AllWithExpr(types.Truer))
 }
