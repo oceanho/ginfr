@@ -143,7 +143,7 @@ func (l *LinkedList) ExistsWithExpr(expr types.Filter) bool {
 }
 
 func (l *LinkedList) Insert(startIdx int, values ...interface{}) error {
-	if startIdx >= l.Length() {
+	if startIdx >= l.Length() || startIdx<0 {
 		return LinkedListIndexUboundRangeError
 	}
 	if startIdx == 0 {
