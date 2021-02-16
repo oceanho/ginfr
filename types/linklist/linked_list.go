@@ -21,6 +21,7 @@ type LinkedList struct {
 }
 
 var (
+	LinkedListIndexUboundRangeError            = fmt.Errorf("linked list ubound range index")
 	LinkedListNotMatchAnyElementError          = fmt.Errorf("linked list has no any match element")
 	LinkedListNotMatchAnyElementWithIndexError = fmt.Errorf("linked list has no any match element with index")
 )
@@ -124,6 +125,61 @@ func (l *LinkedList) Prepend(values ...interface{}) {
 	if oldNext == nil {
 		l.adjustTail(cur)
 	}
+}
+
+func (l *LinkedList) Exists(value interface{}) bool {
+	return l.ExistsWithExpr(func(values ...interface{}) bool {
+		return values[0] == value
+	})
+}
+
+func (l *LinkedList) ExistsWithExpr(expr types.Filter) bool {
+	f := false
+	l.iter(func(values ...interface{}) bool {
+		f = expr(values[2])
+		return f
+	})
+	return f
+}
+
+func (l *LinkedList) Insert(startIdx int, values ...interface{}) error {
+	if startIdx >= l.Length() {
+		return LinkedListIndexUboundRangeError
+	}
+	if startIdx == 0 {
+		l.Prepend(values...)
+		return nil
+	}
+	if startIdx+1 == l.Length() {
+		l.Append(values...)
+		return nil
+	}
+	index := 0
+	var prev *node
+	l.iter(func(values ...interface{}) bool {
+		if index == startIdx {
+			prev = values[0].(*node)
+			return true
+		}
+		index++
+		return false
+	})
+	if prev == nil {
+		return LinkedListNotMatchAnyElementWithIndexError
+	}
+	cur := prev
+	oldNext := prev.next
+	for _, el := range values {
+		cur.next = newNode(el, nil)
+		cur = cur.next
+		l.sizeInc()
+	}
+	cur.next = oldNext
+	// If old linked list are empty or insert on end. should be update tail node.
+	if oldNext == nil || startIdx+1 == l.Length() {
+		l.adjustTail(cur)
+	}
+	return nil
 }
 
 func (l *LinkedList) Update(oldValue, newValue interface{}) error {

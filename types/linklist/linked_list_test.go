@@ -156,7 +156,7 @@ func TestLinkedList_UpdateWithIndex(t *testing.T) {
 
 	err = l.UpdateWithIndex(l.Length()-1, eleNew)
 	assert.Nil(t, err)
-	val = l.Index(l.Length()-1)
+	val = l.Index(l.Length() - 1)
 	assert.Nil(t, err)
 	assert.Equal(t, eleNew, val)
 }
@@ -167,8 +167,8 @@ func TestLinkedList_UpdateWithExpr(t *testing.T) {
 	eleNew := "hello, world, hahaha."
 	l.Append(ele, 1, 2, 3, 4, 5)
 	err := l.UpdateWithExpr(func(values ...interface{}) bool {
-		s,o := values[0].(string)
-		return o && s==ele
+		s, o := values[0].(string)
+		return o && s == ele
 	}, func(oldValue ...interface{}) interface{} {
 		return eleNew
 	})
@@ -178,10 +178,10 @@ func TestLinkedList_UpdateWithExpr(t *testing.T) {
 	assert.Equal(t, eleNew, val)
 
 	err = l.UpdateWithExpr(func(values ...interface{}) bool {
-		s,o := values[0].(int)
-		return o && s==3
+		s, o := values[0].(int)
+		return o && s == 3
 	}, func(oldValue ...interface{}) interface{} {
-		return oldValue[0].(int)*2
+		return oldValue[0].(int) * 2
 	})
 	assert.Nil(t, err)
 	val = l.Index(3)
@@ -190,9 +190,72 @@ func TestLinkedList_UpdateWithExpr(t *testing.T) {
 
 	err = l.UpdateWithIndex(l.Length()-1, eleNew)
 	assert.Nil(t, err)
-	val = l.Index(l.Length()-1)
+	val = l.Index(l.Length() - 1)
 	assert.Nil(t, err)
 	assert.Equal(t, eleNew, val)
+}
+
+func TestLinkedList_Insert(t *testing.T) {
+	l := New()
+	ele := "hello, world"
+	l.Append(ele, 1, 2, 3, 4, 5)
+	err := l.Insert(0, 100, 101, 102, 103)
+	assert.Nil(t, err)
+	for i := 0; i < 4; i++ {
+		assert.Equal(t, l.Index(i), 100+i)
+	}
+	err = l.Insert(l.Length(), 200)
+	assert.NotNil(t, err)
+
+	err = l.Insert(l.Length()-1, 200, 201, 202, 203)
+	assert.Nil(t, err)
+	assert.True(t, l.Exists(ele))
+	start := l.Length() - 4
+	for i := start; i < start+4; i++ {
+		assert.Equal(t, l.Index(i), 200-start+i)
+	}
+}
+
+func TestLinkedList_Iter(t *testing.T) {
+	l := New()
+	ele := "hello, world"
+	l.Append(ele, 1, 2, 3, 4, 5, 100, 101, 102, 103)
+	idx := 0
+	l.Iter(func(values ...interface{}) {
+		t.Logf("idx: %d, value: %v", idx, values)
+		idx++
+	})
+}
+
+func TestLinkedList_Exists(t *testing.T) {
+	l := New()
+	ele := "hello, world"
+	l.Append(ele, 1, 2, 3, 4, 5)
+	assert.True(t, l.Exists(ele))
+	for i := 1; i <= 5; i++ {
+		assert.True(t, l.Exists(i))
+	}
+	assert.False(t, l.Exists(100))
+}
+
+func TestLinkedList_ExistsWithExpr(t *testing.T) {
+	l := New()
+	ele := "hello, world"
+	l.Append(ele, 1, 2, 3, 4, 5)
+	assert.True(t, l.ExistsWithExpr(func(values ...interface{}) bool {
+		s, o := values[0].(int)
+		return o && s == 5
+	}))
+	for i := 1; i <= 5; i++ {
+		assert.True(t, l.ExistsWithExpr(func(values ...interface{}) bool {
+			s, o := values[0].(int)
+			return o && s == i
+		}))
+	}
+	assert.False(t, l.ExistsWithExpr(func(values ...interface{}) bool {
+		s, o := values[0].(int)
+		return o && s == 6
+	}))
 }
 
 func TestLinkedList_Remove(t *testing.T) {
