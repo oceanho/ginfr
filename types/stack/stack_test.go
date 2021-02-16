@@ -24,6 +24,29 @@ func TestStack(t *testing.T) {
 		stk.Push(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 		stk.Clear()
 		assert.True(t, stk.IsEmpty())
+
+		stk.Push(1)
+		stk.Push("hello")
+		v1, ok1 := stk.Peek().(string)
+		assert.True(t, ok1)
+		assert.Equal(t, "hello", v1)
+		assert.Equal(t, 2, stk.Length())
+
+		v1, ok1 = stk.Pop().(string)
+		assert.True(t, ok1)
+		assert.Equal(t, "hello", v1)
+		assert.Equal(t, 1, stk.Length())
+
+		v, ok := stk.Peek().(int)
+		assert.True(t, ok)
+		assert.Equal(t, 1, v)
+		assert.Equal(t, 1, stk.Length())
+
+		v2, ok2 := stk.Pop().(int)
+		assert.True(t, ok2)
+		assert.True(t, stk.IsEmpty())
+		assert.Equal(t, 1, v2)
+		assert.Equal(t, 0, stk.Length())
 	}
 }
 

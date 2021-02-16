@@ -54,7 +54,11 @@ func (l *LinkedList) sizeDec() {
 }
 
 func (l *LinkedList) adjustTail(tail *node) {
-	l.head.val.(*head).tail = tail
+	if tail != nil && tail == l.head {
+		l.head.val.(*head).tail = nil
+	} else {
+		l.head.val.(*head).tail = tail
+	}
 }
 
 // iter callback as (prev, curr, curr.val)
@@ -258,11 +262,7 @@ func (l *LinkedList) PopTail() interface{} {
 	})
 	// Remove the last element.
 	prev.(*node).next = nil
-	if _, ok := prev.(*node).val.(*head); ok {
-		l.adjustTail(nil)
-	} else {
-		l.adjustTail(prev.(*node))
-	}
+	l.adjustTail(prev.(*node))
 	l.sizeDec()
 	return val
 }

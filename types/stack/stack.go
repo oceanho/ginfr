@@ -21,15 +21,17 @@ func (stk *Stack) Length() int {
 }
 
 func (stk *Stack) Push(values ...interface{}) {
-	stk.l.Prepend(values...)
+	for _, v := range values {
+		stk.l.Prepend(v)
+	}
 }
 
 func (stk *Stack) Pop() interface{} {
-	return stk.l.PopTail()
+	return stk.l.PopHead()
 }
 
 func (stk *Stack) Peek() interface{} {
-	return stk.l.Tail()
+	return stk.l.Head()
 }
 
 func (stk *Stack) Clear() {

@@ -1,0 +1,8 @@
+goos: darwin
+goarch: amd64
+pkg: github.com/oceanho/ginfr/types/linklist
+BenchmarkLinkedList_Append-8    	 9582123	       123 ns/op
+BenchmarkGoArray_Append-8       	100000000	        24.0 ns/op
+BenchmarkLinkedList_Prepend-8   	 8305306	       136 ns/op
+BenchmarkGoArray_Prepend-8      	  242682	     82192 ns/op
+

@@ -241,7 +241,7 @@ func BenchmarkLinkedList_Append(b *testing.B) {
 }
 
 func BenchmarkGoArray_Append(b *testing.B) {
-	vals := make([]int,0,32)
+	vals := make([]int, 0, 32)
 	for i := 0; i < b.N; i++ {
 		vals = append(vals, i)
 	}
@@ -255,10 +255,10 @@ func BenchmarkLinkedList_Prepend(b *testing.B) {
 }
 
 func BenchmarkGoArray_Prepend(b *testing.B) {
-	vals := make([]int,0,32)
+	vals := make([]int, 0, 32)
 	for i := 0; i < b.N; i++ {
-		tmp := make([]int,0,len(vals))
-		copy(tmp,vals)
+		tmp := make([]int, 0, len(vals))
+		copy(tmp, vals)
 		vals = append(vals, i)
 		vals = append(vals, tmp...)
 	}
