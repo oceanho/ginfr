@@ -126,10 +126,31 @@ func (l *LinkedList) Prepend(values ...interface{}) {
 	}
 }
 
-func (l *LinkedList) Update(expr types.Filter, valuer types.SetValuer) error {
+func (l *LinkedList) Update(oldValue, newValue interface{}) error {
+	return l.UpdateWithExpr(func(values ...interface{}) bool {
+		return values[0] == oldValue
+	}, func(oldValue ...interface{}) interface{} {
+		return newValue
+	})
+}
+
+func (l *LinkedList) UpdateWithIndex(idx int, newValue interface{}) error {
+	index := 0
+	return l.UpdateWithExpr(func(values ...interface{}) bool {
+		if index == idx {
+			return true
+		}
+		index++
+		return false
+	}, func(oldValue ...interface{}) interface{} {
+		return newValue
+	})
+}
+
+func (l *LinkedList) UpdateWithExpr(expr types.Filter, valuer types.SetValuer) error {
 	err := LinkedListNotMatchAnyElementError
 	l.iter(func(values ...interface{}) bool {
-		if updater(expr, valuer, values) {
+		if updater(expr, valuer, values...) {
 			err = nil
 			return true
 		}

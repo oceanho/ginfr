@@ -109,6 +109,92 @@ func TestLinkedList_JSON(t *testing.T) {
 	t.Logf("l.JSON, %v", string(bytes))
 }
 
+func TestLinkedList_Update(t *testing.T) {
+	l := New()
+	ele := "hello, world"
+	eleNew := "hello, world, hahaha."
+	l.Append(ele, 1, 2, 3, 4, 5)
+	err := l.Update(ele, eleNew)
+	assert.Nil(t, err)
+	val := l.Find(func(values ...interface{}) bool {
+		if s, ok := values[0].(string); ok && s == eleNew {
+			return true
+		}
+		return false
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, eleNew, val)
+
+	val = l.Find(func(values ...interface{}) bool {
+		if s, ok := values[0].(string); ok && s == ele {
+			return true
+		}
+		return false
+	})
+	assert.Nil(t, val)
+
+	assert.NotContains(t, l.All(), ele)
+	assert.Contains(t, l.All(), eleNew)
+}
+
+func TestLinkedList_UpdateWithIndex(t *testing.T) {
+	l := New()
+	ele := "hello, world"
+	eleNew := "hello, world, hahaha."
+	l.Append(ele, 1, 2, 3, 4, 5)
+	err := l.UpdateWithIndex(0, eleNew)
+	assert.Nil(t, err)
+	val := l.Index(0)
+	assert.Nil(t, err)
+	assert.Equal(t, eleNew, val)
+
+	err = l.UpdateWithIndex(1, eleNew)
+	assert.Nil(t, err)
+	val = l.Index(1)
+	assert.Nil(t, err)
+	assert.Equal(t, eleNew, val)
+
+	err = l.UpdateWithIndex(l.Length()-1, eleNew)
+	assert.Nil(t, err)
+	val = l.Index(l.Length()-1)
+	assert.Nil(t, err)
+	assert.Equal(t, eleNew, val)
+}
+
+func TestLinkedList_UpdateWithExpr(t *testing.T) {
+	l := New()
+	ele := "hello, world"
+	eleNew := "hello, world, hahaha."
+	l.Append(ele, 1, 2, 3, 4, 5)
+	err := l.UpdateWithExpr(func(values ...interface{}) bool {
+		s,o := values[0].(string)
+		return o && s==ele
+	}, func(oldValue ...interface{}) interface{} {
+		return eleNew
+	})
+	assert.Nil(t, err)
+	val := l.Index(0)
+	assert.Nil(t, err)
+	assert.Equal(t, eleNew, val)
+
+	err = l.UpdateWithExpr(func(values ...interface{}) bool {
+		s,o := values[0].(int)
+		return o && s==3
+	}, func(oldValue ...interface{}) interface{} {
+		return oldValue[0].(int)*2
+	})
+	assert.Nil(t, err)
+	val = l.Index(3)
+	assert.Nil(t, err)
+	assert.Equal(t, 6, val)
+
+	err = l.UpdateWithIndex(l.Length()-1, eleNew)
+	assert.Nil(t, err)
+	val = l.Index(l.Length()-1)
+	assert.Nil(t, err)
+	assert.Equal(t, eleNew, val)
+}
+
 func TestLinkedList_Remove(t *testing.T) {
 	l := New()
 	ele := "hello, world"
