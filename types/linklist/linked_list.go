@@ -21,7 +21,7 @@ type LinkedList struct {
 }
 
 var (
-	LinkedListIndexUnboundRangeError           = fmt.Errorf("subscript out of bounds")
+	LinkedListIndexUnboundRangeError           = fmt.Errorf("index out of bounds")
 	LinkedListNotMatchAnyElementError          = fmt.Errorf("has no any match element")
 	LinkedListNotMatchAnyElementWithIndexError = fmt.Errorf("has no any match element with index")
 )
