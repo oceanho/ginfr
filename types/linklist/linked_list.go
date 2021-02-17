@@ -21,9 +21,9 @@ type LinkedList struct {
 }
 
 var (
-	LinkedListIndexUboundRangeError            = fmt.Errorf("linked list ubound range index")
-	LinkedListNotMatchAnyElementError          = fmt.Errorf("linked list has no any match element")
-	LinkedListNotMatchAnyElementWithIndexError = fmt.Errorf("linked list has no any match element with index")
+	LinkedListIndexUnboundRangeError           = fmt.Errorf("subscript out of bounds")
+	LinkedListNotMatchAnyElementError          = fmt.Errorf("has no any match element")
+	LinkedListNotMatchAnyElementWithIndexError = fmt.Errorf("has no any match element with index")
 )
 
 func New() *LinkedList {
@@ -143,8 +143,8 @@ func (l *LinkedList) ExistsWithExpr(expr types.Filter) bool {
 }
 
 func (l *LinkedList) Insert(startIdx int, values ...interface{}) error {
-	if startIdx >= l.Length() || startIdx<0 {
-		return LinkedListIndexUboundRangeError
+	if startIdx >= l.Length() || startIdx < 0 {
+		return LinkedListIndexUnboundRangeError
 	}
 	if startIdx == 0 {
 		l.Prepend(values...)
