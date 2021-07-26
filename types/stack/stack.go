@@ -1,6 +1,8 @@
 package stack
 
-import "github.com/oceanho/ginfr/types/linklist"
+import (
+	"github.com/oceanho/ginfr/types/linklist"
+)
 
 type Stack struct {
 	l *linklist.LinkedList

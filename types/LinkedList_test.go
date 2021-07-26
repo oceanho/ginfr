@@ -94,6 +94,34 @@ func BenchmarkListNode_Reverse(b *testing.B) {
 	}
 }
 
+func testListInsertPerformance(numCount int)  {
+	list := newListNode(1)
+	for i := 0; i < numCount; i++ {
+		list.Insert(i)
+	}
+}
+
+func BenchmarkListNode_List10(b *testing.B) {
+	testListInsertPerformance(10)
+}
+
+func BenchmarkListNode_List100(b *testing.B) {
+	testListInsertPerformance(100)
+}
+
+func BenchmarkListNode_List1000(b *testing.B) {
+	testListInsertPerformance(1000)
+}
+
+func BenchmarkListNode_List10000(b *testing.B) {
+	testListInsertPerformance(10000)
+}
+
+func BenchmarkListNode_List100000(b *testing.B) {
+	testListInsertPerformance(100000)
+}
+
+
 func BenchmarkListNode_List(b *testing.B) {
 	list := newListNode(1)
 	for i := 0; i < 10000; i++ {
